@@ -1,0 +1,109 @@
+type ConfirmResponse {
+    receipt_id: String
+    order_id: String
+    price: Int
+    tax_free: Int
+    cancelled_price: Int
+    cancelled_tax_free: Int
+    order_name: String
+    company_name: String
+    gateway_url: String
+    sandbox: String
+    pg: String
+    method: String
+    method_symbol: String
+    method_origin: String
+    method_origin_symbol: String
+    currency: String
+    receipt_url: String
+    purchased_at: String
+    cancelled_at: String
+    requested_at: String
+    status_locale: String
+    status: Int
+    card_data: Card_data
+    phone_data: Phone_data
+    bank_data: Bank_data
+    vbank_data: Vbank_data
+}
+
+type Card_data {
+    card_approve_no: String
+    card_no: String
+    card_quota: String
+    card_company_code: String
+    card_company: String
+    receipt_url: String
+}
+
+type Phone_data {
+    auth_no: String
+    phone: String
+}
+
+type Bank_data {
+    bank_code: String
+    bank_name: String
+    cash_receipt_no: String
+}
+
+type Vbank_data {
+    bank_code: String
+    bank_name: String
+    bank_account: String
+    bank_username: String
+    sender_name: String
+    expired_at: String
+    cash_receipt_no: String
+}
+
+input ConfirmPaymentInput {
+    sid: String!
+    receipt_id: String!
+    itemIdx: Int
+    price: Int
+    nop: Int
+}
+
+type ConfirmStock{
+    status: Int
+    code: Int
+    message: String
+    data: ConfirmStockData
+}
+
+type ConfirmStockData {
+    vbank_data: Vbank_data
+}
+
+input PaymentItemInput {
+    receipt_id: String!
+    price: Int
+    campaignIdx: Int
+    itemIdx: Int
+    nop: Int
+    startDate: String
+    endDate: String
+    submitChannel: Int
+    agreeContent: Int
+    note: String
+}
+
+type PaymentItemResponse{
+    status: Int
+    code: Int
+    message: String
+#    data: ConfirmStockData
+}
+
+extend type Query {
+#    부트페이 토큰 발급
+    confirmPayment(receipt_id:String): ConfirmResponse
+#    결제 취소
+    cancelPayment(receipt_id:String): ConfirmResponse
+}
+
+extend type Mutation {
+    confirmStock(confirmPaymentInput:ConfirmPaymentInput): ConfirmStock
+    paymentItem(paymentItemInput:PaymentItemInput): PaymentItemResponse
+}

@@ -1,0 +1,201 @@
+﻿type Portfolio {
+    idx: Int
+    memberIdx: Int
+    status: Int
+    type: Int
+    channel: Int
+    title: String
+    campaignIdx: Int
+    submitIdx: Int
+    postUrl: String
+    thumbnail: String
+    ocrImg: String
+    ocrImg2: String
+    mark_yn: String
+    cumulativeViewCount: Int # 네이버
+    cumulativeLikeCount: Int # 네이버
+    cumulativeCommentCount: Int # 네이버
+
+    likeCount: Int # 인스타그램
+    saveCount: Int # 인스타그램
+    shareCount: Int # 인스타그램
+    commentCount: Int # 인스타그램
+    participateAccountCount: Int # 인스타그램
+    activityCount: Int # 인스타그램
+    accountsReachedCount: Int # 인스타그램
+
+    viewCount: String # 유투브
+    watchTime: String # 유투브
+    averageWatchTime: String # 유투브
+    impressionCount: String # 유투브
+    clickRate: String # 유투브
+
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+
+type representativePostResponse {
+    data: [Portfolio]
+}
+
+input CreatePortfolioInput {
+    title: String!
+    type: Int!
+    submitIdx: Int
+    postUrl: String!
+}
+
+input UpdatePortfolioInput {
+    id: Int!
+    title: String!
+    type: Int!
+    submitIdx: Int
+    postUrl: String!
+}
+
+type UploadResponse {
+    memberIdx: Int
+    portfolioIdx: Int
+    awsUrl: String
+    awsKey: String
+    createdAt: Date
+}
+
+type FinalResponse {
+    portfolio: Portfolio!
+    uploadedImages: [UploadResponse!]!
+}
+
+type OcrResult {
+    code: Int
+    data: OcrData # base.graphql에 정의
+}
+
+type PortFolios implements Pagination {
+    #  pagination: Pagination!
+    dataPerPage: Int
+    totalPage: Int
+    total: Int
+    next: Int
+    previous: Int
+    currentPage: Int
+    data: [Portfolio!]!
+}
+
+type portFolioResponse {
+    code: Int
+    message: String
+    data: Portfolio
+    portfolioSubmit: PortfolioSubmit
+}
+
+type PortfolioSubmit {
+    submitIdx: Int
+    campaignName: String
+    itemName: String
+    image: String
+}
+
+type MarkCountResponse{
+    code: Int
+    message: String
+    data: Int
+}
+
+type analyzeResponse{
+    code: Int
+    message: String
+    data: analyze
+}
+
+type analyze{
+    totalVisitor: Int  # 네이버
+    averageVisitor: Int # 네이버
+    buddyNumber: Int    # 네이버
+    style : String    # 네이버
+
+    channelName: String # 유튜브
+    subscriberCount: Int # 유튜브
+    videoCount: Int # 유튜브
+    viewCount: BigInt # 유튜브
+
+    interest: String # 인스타그램
+    postsCount: Int # 인스타그램
+    followersCount: Int # 인스타그램
+    followsCount: Int # 인스타그램
+    totalLikeCount: Int # 인스타그램
+    totalCommentCount: Int # 인스타그램
+    contentAnalysis: String # 인스타그램
+
+    hashtags: [String]
+    adCost: Float
+    er : String
+    finalEvaluation: String
+    uploadCycle: String
+    targetAnalysis: [String]
+
+    createdAt: String
+    updatedAt: String
+}
+
+input CreateProfileInput {
+    nickname: String
+    keyword: String
+}
+
+type ProfileHttpResponse {
+    code: Int
+    message: String
+    data: ProfileData
+}
+
+type ProfileData{
+    nickname: String
+    aws_url: String
+    keyword: [String]
+}
+
+input UpdatePortfolioAnalyzeInput {
+    type: Int!
+    link: String!
+}
+
+extend type Mutation {
+    createPortfolio(
+        createInput: CreatePortfolioInput!,
+        file0: Upload!
+        file1: Upload!
+        file2: Upload
+    ): portFolioResponse
+
+    updatePortfolio(
+        updateInput: UpdatePortfolioInput!,
+        file0: Upload!
+        file1: Upload
+        file2: Upload
+    ): portFolioResponse
+
+    createProfile(
+        createInput: CreateProfileInput!
+        file0: Upload
+    ): ProfileHttpResponse
+
+    representativePostingSetting(
+        idx: Int!
+        type: Int!
+        mark_yn: String!
+    ): GraphqlHttpResponse
+
+    updatePortfolioAnalyze(updatePortfolioAnalyzeInput: UpdatePortfolioAnalyzeInput): GraphqlHttpResponse
+}
+
+extend type Query {
+    #    portfolio
+    getProfile: ProfileHttpResponse
+    getMarkCount(type:Int!): MarkCountResponse
+    getPortfolioList(type:Int!, page:Int, take:Int, dataPerPage:Int): PortFolios!
+    representativePost(type:Int!) : representativePostResponse
+    getPortfolioDetail(idx:Int!,type:Int!): portFolioResponse
+    getPortfolioAnalyze(type:Int!) :analyzeResponse
+}

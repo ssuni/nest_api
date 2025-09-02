@@ -1,0 +1,124 @@
+type TripMoney {
+    idx: Int!
+    status: Int!
+    ouid: String!
+    ordername: String!
+    orderdate: Int!
+    startdatetime: Int!
+    enddatetime: Int!
+    cancel: Int!
+}
+
+type TripMemberCash {
+    memberId: String
+    orderDate: String!
+    ordername: String!
+    deposit: Int!
+}
+
+type TripWithdrawal {
+    memberIdx: Int
+    memberId: String
+    createdAt: String!
+    status: Int!
+    withdrawalAmount: Int!
+}
+
+type TripLinkResponse {
+    tripLinks: [TripLinkDateString]
+}
+
+type TripLinkDateString {
+    ordername: String
+    ordertype: String
+    orderDate: String
+    startDate: String
+    endDate: String
+    status: String
+    deposit: Int
+    total: Int
+}
+
+type TripCashWithdrawal {
+    idx: Int
+    type: String!
+    memberId: String
+    createdAt: String!
+    ordername: String
+    orderDate: String
+    startDate: String
+    endDate: String
+    deposit: Int!
+    orderamount: Int
+    status: Int
+    withdrawalDate: String
+    division: String
+}
+
+type TripWithdrawalOutput {
+    idx: Int
+    memberId: String
+    phone: String
+    status: Int
+    withdrawalAmount: Int
+    residentRegistrationNumber: String
+    identificationCardImageKey: String
+    bankBookImageKey: String
+    bankName  : String
+    accountHolder: String
+    accountNumber: String
+    denyReason: String
+}
+
+type RecommendWithdrawalOutput {
+    idx: Int
+    memberId: String
+    status: Int
+    withdrawalAmount: Int
+    residentRegistrationNumber: String
+    identificationCardImageKey: String
+    bankBookImageKey: String
+    bankName  : String
+    accountHolder: String
+    accountNumber: String
+    denyReason: String
+}
+
+type TripMoneyStatus {
+    memberId: String
+    totalDeposit: Float!
+    totalCancel: Int!
+    totalProfit: Int!
+    confirmedWithdrawal: Int!
+    expectedProfitAmount: Int!
+    totalWithdrawal: Int!
+    totalWithdrawable: Int!
+    statusResults: Int
+    denyIdx: Int
+    denyMsg: String
+    denyRecommendIdx: Int
+    denyRecommendMsg: String
+    resultLastWithdrawal: TripWithdrawalOutput
+    resultLastRecommendWithdrawal: RecommendWithdrawalOutput
+    recommendWithdrawable: Int
+}
+
+type imgResponse {
+    img: [introductionImgs]
+}
+
+type introductionImgs {
+    url: String
+}
+
+extend type Query {
+    getIntroductionImg: imgResponse
+    #  tripMoney: [TripMoney!]!
+    #  tripMoneyLink(status: Int, start: String, end: String): [TripMoney!]!
+    tripMoneyLink(status: Int, start: String, end: String, division: String): TripLinkResponse!
+    tripCash: [TripMemberCash!]!
+    tripWithdrawal: [TripWithdrawal!]!
+    tripCashWithdrawal(type: String,page: Int, limit: Int): [TripCashWithdrawal!]!
+    tripMoneyStatus: TripMoneyStatus!
+}
+

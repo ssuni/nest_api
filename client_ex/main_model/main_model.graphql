@@ -1,0 +1,111 @@
+type Banner{
+  idx: Int
+  pageCode: Int
+  code: String
+  image: String
+  name: String
+  regdate: String
+  ordering: Int
+  link: String
+}
+type Category{
+  idx: Int
+  name: String
+  icon: String
+  ordering: Int
+  memberType: Int
+  signinRequired: Int
+  notEditable: Int
+  type: String
+  cateArea: [CateArea]
+}
+
+type Product{
+    manuscriptFee: Int,
+#    lowestPriceDeposit: Int,
+    approvalRate: Int
+    weight: Int
+    idx: Int
+    name: String
+    status: Int
+    approvalMethod: Int
+    grade: Int
+    price: Int
+    discount: Int
+    image: String
+    image2: String
+    regdate: String
+    ordering: Int
+    link: String
+    lowestPriceOrig: Int
+    discountPercentage: Int
+    lowestPriceDeposit: Int
+    discountPrice: Int
+    lowestSchedulePriceDeposit: Int
+    category: [Category]
+    campaignItem: [CampaignItem]
+}
+
+type CampaignItem{
+    idx: Int
+    name: String
+    startDate: String
+    endDate: String
+    image: String
+    priceOrig: Int
+    priceDeposit: Int
+    lowestPrice: Int
+    info: String
+    infoGuide: String
+    channels: [String]
+    application_period: String
+    dc11: Int
+    dc12: Int
+    dc21: Int
+    dc22: Int
+    regdate: String
+    notWeekends: Int
+    itemDiscount: Int
+    itemDiscountText: String
+    limitSleep: Int
+    limitSubmit: Int
+    minDays: Int
+    maxDays: Int
+    minSubmit: Int
+    sellType: Int
+    calcType1: Int
+    calcType2: Int
+    infoRefund: String
+    infoRefund1: String
+    infoRefund2: String
+    inStock: Boolean
+    campaignItemSchedule: [CampaignItemSchedules]
+}
+
+type ChannelText{
+    idx: Int
+    name: String
+}
+
+type CampaignItemSchedules{
+    idx: Int
+    date: String
+    formattedDate: String
+    itemIdx: Int
+    status: Int
+    stock: Int
+    priceDeposit: Int
+    discountPriceDeposit: Int
+
+}
+
+type MainPage {
+    banner: [Banner]
+    categories: [Category]
+    products: [Product]
+}
+
+extend type Query {
+    getMainPage(sort:String): MainPage
+}
+
